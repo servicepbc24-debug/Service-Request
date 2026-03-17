@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Service Request</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Sarabun', sans-serif;
+
+      /* 🔵 พื้นสีน้ำเงินอ่อน */
+      background-color: #e3f2fd;
+
+      /* 🔥 โลโก้ลายน้ำ */
+      background-image: url('img/pbc1.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 800px auto;
+      background-attachment: fixed;
+      background-blend-mode: lighten;
+
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      color: #333;
+    }
+
+    h2 {
+      color: #0d47a1;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      color: #0d47a1;
+      font-weight: 600;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: 2px solid #90caf9;
+      border-radius: 12px;
+      background-color: #ffffff;
+      box-sizing: border-box;
+      font-family: 'Sarabun', sans-serif;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      width: 100%;
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background-color: #1565c0;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Service Request</h2>
+
+<form method="post" name="Form Responses 1" enctype="multipart/form-data">
+
+  <label>ชื่อบริษัท</label>
+  <select name="ชื่อบริษัท" required>
+    <option value="">-- เลือก --</option>
+    <option>บริษัท สยามฟูด เซอร์วิส จำกัด(สาขาลำลูกกา)</option>
+    <option>บริษัท สยามฟูด เซอร์วิส จำกัด(สาขาอยุธยา)</option>
+  </select>
+
+  <label>ชื่อผู้แจ้งและเบอร์ติดต่อ</label>
+  <input type="text" name="ชื่อผู้แจ้งและเบอร์ติดต่อ" required>
+
+  <label>รุ่นอุปกรณ์</label>
+  <select name="รุ่นอุปกรณ์" required>
+    <option value="">-- เลือก --</option>
+    <option>MH241</option>
+    <option>iData K8C</option>
+    <option>K3 Pro</option>
+    <option>WR30</option>
+    <option>VM3A</option>
+    <option>Accessory อื่นๆ</option>
+  </select>
+
+  <label>ปัญหาที่พบ</label>
+  <textarea name="ปัญหาที่พบ" rows="3" required></textarea>
+
+  <label>แนบไฟล์ (รูป/วิดีโอ)</label>
+  <input type="file" name="ไฟล์แนบ" accept="image/*,video/*">
+
+  <button type="submit">บันทึก</button>
+
+</form>
+
+<script>
+const scriptURL = 'https://script.google.com/macros/s/AKfycbyriNnK7MS_9XBYipHsTjaBll4QKiTWiexbPgFAiqtJnOCFjWK2-pCWlRYV8ElMf_zOGA/exec'
+const form = document.forms['Form Responses 1']
+
+form.addEventListener('submit', e => {
+  e.preventDefault()
+
+  const formData = new FormData(form)
+
+  form.reset()  // 🔥 เคลียร์ทันที (เร็วขึ้นมาก)
+  alert("กำลังบันทึกข้อมูล...")
+
+  fetch(scriptURL, {
+    method: 'POST',
+    body: formData
+  })
+  .then(() => {
+    alert("บันทึกเรียบร้อย")
+  })
+  .catch(() => {
+    alert("เกิดข้อผิดพลาด")
+  })
+})
+</script>
