@@ -112,14 +112,34 @@
 const scriptURL = 'https://script.google.com/macros/s/AKfycbyriNnK7MS_9XBYipHsTjaBll4QKiTWiexbPgFAiqtJnOCFjWK2-pCWlRYV8ElMf_zOGA/exec'
 const form = document.forms['Form Responses 1']
 
-form.addEventListener('submit', e => {
+form.addEventListener('submit', async e => {
   e.preventDefault()
 
-  const formData = new FormData(form)
+  const fileInput = form.querySelector('input[type="file"]')
+  const file = fileInput.files[0]
 
-  form.reset()  // 🔥 เคลียร์ทันที (เร็วขึ้นมาก)
+  let base64File = ""
+  let fileName = ""
+
+  // 🔥 แปลงไฟล์ (จำเป็น)
+  if (file) {
+    fileName = file.name
+    base64File = await toBase64(file)
+  }
+
+  const formData = new URLSearchParams()
+  formData.append("ชื่อบริษัท", form["ชื่อบริษัท"].value)
+  formData.append("ชื่อผู้แจ้งและเบอร์ติดต่อ", form["ชื่อผู้แจ้งและเบอร์ติดต่อ"].value)
+  formData.append("รุ่นอุปกรณ์", form["รุ่นอุปกรณ์"].value)
+  formData.append("ปัญหาที่พบ", form["ปัญหาที่พบ"].value)
+  formData.append("file", base64File)
+  formData.append("fileName", fileName)
+
+  // ⚡ เคลียร์ฟอร์มทันที (เร็ว)
+  form.reset()
   alert("กำลังบันทึกข้อมูล...")
 
+  // 🚀 ส่งแบบ background
   fetch(scriptURL, {
     method: 'POST',
     body: formData
@@ -131,4 +151,14 @@ form.addEventListener('submit', e => {
     alert("เกิดข้อผิดพลาด")
   })
 })
+
+// แปลงไฟล์
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result.split(',')[1])
+    reader.onerror = error => reject(error)
+  })
+}
 </script>
